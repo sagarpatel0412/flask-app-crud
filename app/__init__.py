@@ -9,6 +9,8 @@ import os
 
 load_dotenv()
 
+
+
 def create_app():
     app = Flask(__name__)
     CORS(app)
@@ -16,6 +18,8 @@ def create_app():
 
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_URI')
     app.config['SQLALCHEMY_ECHO'] = True
+    app.config['DEBUG'] = True
+    app.config['TEMPLATES_AUTO_RELOAD'] = True
 
 
     db.init_app(app)
@@ -27,6 +31,41 @@ def create_app():
     def home():
         print("Home route accessed")
         return render_template('index.html')
+
+    @app.route('/about')
+    def about():
+        print("Home route accessed")
+        return render_template('about.html')
+
+    @app.route('/blog')
+    def blog():
+        print("Home route accessed")
+        return render_template('blog.html')
+
+    @app.route('/blog-single')
+    def blogSingle():
+        print("Home route accessed")
+        return render_template('blog-single.html')
+
+    @app.route('/contact')
+    def contact():
+        print("Home route accessed")
+        return render_template('contact.html')
+
+    @app.route('/restaurant')
+    def restaurent():
+        print("Home route accessed")
+        return render_template('restaurant.html')
+
+    @app.route('/rooms-single')
+    def roomsSingle():
+        print("Home route accessed")
+        return render_template('rooms-single.html')
+
+    @app.route('/rooms')
+    def rooms():
+        print("Home route accessed")
+        return render_template('rooms.html')
 
     @app.route('/fetch-products')
     def fetch_products():
