@@ -21,3 +21,40 @@ def create_user():
     db.session.commit()
 
     return jsonify({'id': new_user.id, 'username': new_user.username}), 201
+
+@user_bp.route('/users/<int:user_id>', methods=['GET'])
+def get_user(user_id):
+    user = User.query.get(user_id)
+    if user is None:
+        return jsonify({'error': 'User not found'}), 404
+    
+    return jsonify({'id': user.id, 'username': user.username, 'email': user.email}), 200
+
+@user_bp.route('/users/<int:user_id>', methods=['PUT'])
+def update_user(user_id):
+    data = request.get_json()
+    
+    if not data or not 'username' in data or not 'email' in data:
+        return jsonify({'error': 'Invalid input'}), 400
+
+    user = User.query.get(user_id)
+    if user is None:
+        return jsonify({'error': 'User not found'}), 404
+    
+    user.username = data['username']
+    user.email = data['email']
+    db.session.commit()
+
+    return jsonify({'id': user.id, 'username': user.username, 'email': user.email}), 200
+
+
+@user_bp.route('/users/<int:user_id>', methods=['DELETE'])
+def delete_user(user_id):
+    user = User.query.get(user_id)
+    if user is None:
+        return jsonify({'error': 'User not found'}), 404
+    
+    db.session.delete(user)
+    db.session.commit()
+
+    return jsonify({'message': 'User deleted successfully'}), 200
