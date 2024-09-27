@@ -67,7 +67,7 @@ def create_app():
         print("Home route accessed")
         return render_template('rooms.html')
 
-    @app.route('/fetch-products')
+    @app.route('/api/v1/fetch-products')
     def fetch_products():
         url = 'https://dummyjson.com/products'
         response = requests.get(url)
