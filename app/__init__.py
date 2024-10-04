@@ -6,6 +6,8 @@ from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv
 import os
+from flask_jwt_extended import JWTManager
+from flask_migrate import Migrate
 
 load_dotenv()
 
@@ -20,10 +22,20 @@ def create_app():
     app.config['SQLALCHEMY_ECHO'] = True
     app.config['DEBUG'] = True
     app.config['TEMPLATES_AUTO_RELOAD'] = True
+    app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET')
+    jwt = JWTManager(app)
 
+    @jwt.unauthorized_loader
+    def missing_authorization_header(error):
+        return jsonify({"message": "Unauthorized","status":401,"error":True}), 401
+
+    @jwt.invalid_token_loader
+    def invalid_token(error):
+        return jsonify({"msg": "Invalid Token"}), 401
 
     db.init_app(app)
 
+    migrate = Migrate(app, db)
     with app.app_context():
         db.create_all()
 

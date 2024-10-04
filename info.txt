@@ -1,0 +1,12 @@
+To activate environment in python flask use this command 
+source venv/bin/activate
+To deactivate environment
+deactivate
+
+to create migration do run this 
+
+flask db init
+flask db migrate -m "add unique in user.username"
+flask db upgrade
+
+
